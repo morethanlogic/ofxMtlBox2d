@@ -139,9 +139,9 @@ void mtlBox2d::enableMouseJoints() {
 	ofAddListener(ofEvents.touchMoved, this, &mtlBox2d::onDrag);
 	ofAddListener(ofEvents.touchUp,    this, &mtlBox2d::onRelease);
 #else
-	ofAddListener(ofEvents.mousePressed,  this, &mtlBox2d::onPress);
-	ofAddListener(ofEvents.mouseDragged,  this, &mtlBox2d::onDrag);
-	ofAddListener(ofEvents.mouseReleased, this, &mtlBox2d::onRelease);
+	ofAddListener(ofEvents().mousePressed,  this, &mtlBox2d::onPress);
+	ofAddListener(ofEvents().mouseDragged,  this, &mtlBox2d::onDrag);
+	ofAddListener(ofEvents().mouseReleased, this, &mtlBox2d::onRelease);
 #endif
 }
 
@@ -152,9 +152,9 @@ void mtlBox2d::disableMouseJoints() {
 	ofRemoveListener(ofEvents.touchMoved, this, &mtlBox2d::onDrag);
 	ofRemoveListener(ofEvents.touchUp,    this, &mtlBox2d::onRelease);
 #else
-	ofRemoveListener(ofEvents.mousePressed,  this, &mtlBox2d::onPress);
-	ofRemoveListener(ofEvents.mouseDragged,  this, &mtlBox2d::onDrag);
-	ofRemoveListener(ofEvents.mouseReleased, this, &mtlBox2d::onRelease);
+	ofRemoveListener(ofEvents().mousePressed,  this, &mtlBox2d::onPress);
+	ofRemoveListener(ofEvents().mouseDragged,  this, &mtlBox2d::onDrag);
+	ofRemoveListener(ofEvents().mouseReleased, this, &mtlBox2d::onRelease);
 #endif
 }
 
