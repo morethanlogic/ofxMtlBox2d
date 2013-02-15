@@ -1,36 +1,54 @@
-//
-//  ofxMtlBox2dDistanceJoint.cpp
-//  Caterpillar
-//
-//  Created by Elie Zananiri on 2013-02-15.
-//
-//
+/***********************************************************************
+ *
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
+ * more than logic http://www.morethanlogic.com/
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of "more than logic" nor the names of its contributors
+ *       may be used to endorse or promote products derived from this software
+ *       without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ***********************************************************************/
+
+/*
+ *  ofxMtlBox2dDistanceJoint.cpp
+ *  ofxMtlBox2d
+ *
+ *  Created by Elie Zananiri on 2013-02-15.
+ *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+ */
 
 #include "ofxMtlBox2dDistanceJoint.h"
 
 //------------------------------------------------
 ofxMtlBox2dDistanceJoint::ofxMtlBox2dDistanceJoint()
 {
-    mWorld = NULL;
-    mJoint = NULL;
+
 }
 
 //------------------------------------------------
 ofxMtlBox2dDistanceJoint::~ofxMtlBox2dDistanceJoint()
 {
-    if (mJoint) destroy();
-}
 
-//------------------------------------------------
-bool ofxMtlBox2dDistanceJoint::setWorld(b2World* world)
-{
-    if (!world) {
-		ofLog(OF_LOG_WARNING, "ofxMtlBox2dDistanceJoint::setWorld() Must have a valid b2World");
-		return false;
-	}
-
-    mWorld = world;
-    return true;
 }
 
 //------------------------------------------------
@@ -41,57 +59,41 @@ void ofxMtlBox2dDistanceJoint::setPhysics(float frequency, float damping)
 }
 
 //------------------------------------------------
-void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *body1, b2Body *body2)
+void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB)
 {
     if (!setWorld(world)) return;
 
     // create a joint and add it to the world
-    b2Vec2 anchor1 = body1->GetWorldCenter();
-    b2Vec2 anchor2 = body2->GetWorldCenter();
+    b2Vec2 anchorA = bodyA->GetWorldCenter();
+    b2Vec2 anchorB = bodyB->GetWorldCenter();
 
-    _jd.Initialize(body1, body2, anchor1, anchor2);
+    _jd.Initialize(bodyA, bodyB, anchorA, anchorB);
 
-    mJoint = (b2DistanceJoint *)mWorld->CreateJoint(&_jd);
+    mJoint = mWorld->CreateJoint(&_jd);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dDistanceJoint::setLength(float length)
 {
     if (mJoint)
-        mJoint->SetLength(PIX2M(length));
+        ((b2DistanceJoint *)mJoint)->SetLength(PIX2M(length));
 }
 
 //------------------------------------------------
 void ofxMtlBox2dDistanceJoint::setLengthB2(float length)
 {
     if (mJoint)
-        mJoint->SetLength(length);
+        ((b2DistanceJoint *)mJoint)->SetLength(length);
 }
 
 //------------------------------------------------
 float ofxMtlBox2dDistanceJoint::getLength()
 {
-    return M2PIX(mJoint->GetLength());
+    return M2PIX(((b2DistanceJoint *)mJoint)->GetLength());
 }
 
 //------------------------------------------------
 float ofxMtlBox2dDistanceJoint::getLengthB2()
 {
-    return mJoint->GetLength();
-}
-
-//------------------------------------------------
-void ofxMtlBox2dDistanceJoint::destroy()
-{
-    if (!mWorld) {
-        ofLog(OF_LOG_WARNING, "ofxMtlBox2dDistanceJoint::destroy() Must have a valid b2World");
-        return;
-    }
-    else if (!mJoint) {
-        ofLog(OF_LOG_WARNING, "ofxMtlBox2dDistanceJoint::destroy() NULL joint");
-        return;
-    }
-
-    mWorld->DestroyJoint(mJoint);
-    mJoint  = NULL;
+    return ((b2DistanceJoint *)mJoint)->GetLength();
 }

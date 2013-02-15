@@ -30,7 +30,7 @@
  * ***********************************************************************/
 
 /*
- *  ofxMtlBox2dDistanceJoint.h
+ *  ofxMtlBox2dBaseJoint.h
  *  ofxMtlBox2d
  *
  *  Created by Elie Zananiri on 2013-02-15.
@@ -39,24 +39,33 @@
 
 #pragma once
 
-#include "ofxMtlBox2dBaseJoint.h"
+#include "ofxMtlBox2d.h"
 
 //========================================================================
-class ofxMtlBox2dDistanceJoint : public ofxMtlBox2dBaseJoint
+class ofxMtlBox2dBaseJoint
 {
     public:
-                            ofxMtlBox2dDistanceJoint();
-                            ~ofxMtlBox2dDistanceJoint();
+        ofxMtlBox2dBaseJoint();
+        ~ofxMtlBox2dBaseJoint();
 
-        void                setPhysics(float frequency, float damping);
-        void                setup(b2World *world, b2Body *bodyA, b2Body *bodyB);
+        bool                setWorld(b2World* world);
 
-        void                setLength(float length);
-        void                setLengthB2(float length);
-        float               getLength();
-        float               getLengthB2();
+        b2Body *            getBodyA();
+        b2Body *            getBodyB();
+
+        const ofPoint       getAnchorA();
+        const b2Vec2        getAnchorAB2();
+        const ofPoint       getAnchorB();
+        const b2Vec2        getAnchorBB2();
+
+        void                destroy();
+
+        virtual void        update() {}
+        virtual void        draw() {}
+
+        b2World *           mWorld;
+        b2Joint *           mJoint;
 
     protected:
-        // cached structs
-        b2DistanceJointDef  _jd;
+
 };
