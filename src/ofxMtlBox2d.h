@@ -60,7 +60,7 @@
 // any data passed or returned to any mtlXXX object is assumed to be in
 // pixels, unless the method has the "B2" suffix in its name. For 
 // rotations, the data is assumed to be in degrees, or in radians if the
-// method has the "B2" suffix.
+// method has the "B2" suffix. Got it?
 class ofxMtlBox2d
 {    
     public:
