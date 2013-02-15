@@ -46,6 +46,8 @@ ofxMtlBox2d::ofxMtlBox2d()
     // create the world
     _world = new b2World(b2Vec2(0, 0), true);
     _world->SetDebugDraw(&_debugDraw);
+
+    _bounds = NULL;
 }
 
 //--------------------------------------------------------------
@@ -61,6 +63,11 @@ void ofxMtlBox2d::createBounds(float x, float y, float width, float height)
     if (!_world) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2d::createBounds() Must have a valid b2World");
 		return;
+    }
+
+    if (_bounds) {
+        // delete the previous bounds
+        _world->DestroyBody(_bounds);
     }
     
     b2BodyDef bd;
