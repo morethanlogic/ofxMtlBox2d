@@ -1,8 +1,6 @@
-#pragma once
-
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -39,21 +37,22 @@
  *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
+#pragma once
+
 #include "ofxMtlBox2dBaseShape.h"
 
 //========================================================================
-class ofxMtlBox2dCircle : public ofxMtlBox2dBaseShape {
-	
+class ofxMtlBox2dCircle : public ofxMtlBox2dBaseShape
+{	
     public:
                     ofxMtlBox2dCircle();
                     ~ofxMtlBox2dCircle();
-        void        setup(b2World* _world, float _x, float _y, float _radius, float _angle = 0, bool _static = false);
+        void        setup(b2World *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
     
         float       getRadius();
-        void        setRadius(float _radius);
+        void        setRadius(float radius);
     
     protected:
-        float       radius;
-        GLfloat*    dir;
-    
+        float       _radius;
+        GLfloat*    _dir;
 };

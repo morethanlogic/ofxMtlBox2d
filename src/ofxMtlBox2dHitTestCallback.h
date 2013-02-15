@@ -2,7 +2,7 @@
 
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -42,8 +42,8 @@
 #include <Box2D.h>
 
 //========================================================================
-class ofxMtlBox2dHitTestCallback : public b2QueryCallback {
-    
+class ofxMtlBox2dHitTestCallback : public b2QueryCallback
+{    
     public:
         //------------------------------------------------
         ofxMtlBox2dHitTestCallback(const b2Vec2& _point) {
@@ -70,5 +70,4 @@ class ofxMtlBox2dHitTestCallback : public b2QueryCallback {
         //------------------------------------------------
         b2Vec2      point;
         b2Fixture   *fixture;
-    
 };

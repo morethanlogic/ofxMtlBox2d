@@ -1,7 +1,8 @@
 #include "testApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup() {
+void testApp::setup()
+{
     ofSeedRandom();
     ofSetFrameRate(30);
     ofEnableAlphaBlending();
@@ -15,22 +16,23 @@ void testApp::setup() {
     physics.setGravityB2(b2Vec2(0, 9.8));
     physics.createBounds(0, 0, ofGetWidth(), ofGetHeight());
     
-    debug = false;
-    info  = true;
+    bDebug = true;
 }
 
 //--------------------------------------------------------------
-void testApp::update() {
+void testApp::update()
+{
     physics.update();
 }
 
 //--------------------------------------------------------------
-void testApp::draw() {
+void testApp::draw()
+{
     ofBackground(0, 0, 0);
 
     physics.debug();
     
-    if (info) {
+    if (bDebug) {
         ofSetColor(255, 255, 255);
         ofDrawBitmapString("FPS: " + ofToString(ofGetFrameRate(), 2) +
                            "\nBODIES: " + ofToString((int)bodies.size()) +
@@ -39,38 +41,45 @@ void testApp::draw() {
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key) { 
+void testApp::keyPressed(int key)
+{
 	switch (key) {
         case 'd':
-            debug = !debug;
-            break;
-        case 'i':
-            info = !info;
+            bDebug = !bDebug;
             break;
 	}
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key) { 
+void testApp::keyReleased(int key)
+{
+
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y) {
+void testApp::mouseMoved(int x, int y)
+{
+
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button) {
+void testApp::mouseDragged(int x, int y, int button)
+{
+
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button) {
+void testApp::mousePressed(int x, int y, int button)
+{
     if (button == 0) {
         // build a new circle
         ofxMtlBox2dCircle *circle = new ofxMtlBox2dCircle();
         circle->setPhysics(10, .2f, .5f);
         circle->setup(world, x, y, ofRandom(20, 50), ofRandom(0, 359));
         bodies.push_back(circle);
-    } else {
+    }
+    else {
+        // build a new box
         ofxMtlBox2dBox *box = new ofxMtlBox2dBox();
         box->setPhysics(10, .2f, .5f);
         box->setup(world, x, y, ofRandom(20, 50), ofRandom(20, 50), ofRandom(0, 359));
@@ -79,5 +88,7 @@ void testApp::mousePressed(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased() {
+void testApp::mouseReleased()
+{
+
 }

@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -40,34 +40,37 @@
 #include "ofxMtlBox2dBox.h"
 
 //------------------------------------------------
-ofxMtlBox2dBox::ofxMtlBox2dBox() {
-    dir   = new GLfloat[4];
-    verts = new GLfloat[4 * 2];
+ofxMtlBox2dBox::ofxMtlBox2dBox()
+{
+    _dir   = new GLfloat[4];
+    _verts = new GLfloat[4 * 2];
 }
 
 //------------------------------------------------
-ofxMtlBox2dBox::~ofxMtlBox2dBox() {
-    delete [] dir;
-    delete [] verts;
+ofxMtlBox2dBox::~ofxMtlBox2dBox()
+{
+    delete [] _dir;
+    delete [] _verts;
 }
 
 //------------------------------------------------
-void ofxMtlBox2dBox::setup(b2World* _world, float _x, float _y, float _width, float _height, float _angle, bool _static) {
-    if (!setWorld(_world)) return;
+void ofxMtlBox2dBox::setup(b2World *world, float x, float y, float width, float height, float angle, bool bStatic)
+{
+    if (!setWorld(world)) return;
     
     // create a body and add it to the world
-    bd.type = _static? b2_staticBody : b2_dynamicBody;
-    bd.position.Set(PIX2M(_x), PIX2M(_y));
-    bd.angle = _angle;
+    _bd.type = bStatic? b2_staticBody : b2_dynamicBody;
+    _bd.position.Set(PIX2M(x), PIX2M(y));
+    _bd.angle = DEG2RAD(angle);
     
-    body = world->CreateBody(&bd);
+    mBody = mWorld->CreateBody(&_bd);
     
     // add collision shapes to that body
-    width  = _width;
-    height = _height;
-    b2PolygonShape m_box;
-    m_box.SetAsBox(PIX2M(width/2), PIX2M(height/2));
+    _width  = width;
+    _height = height;
+    b2PolygonShape box;
+    box.SetAsBox(PIX2M(_width/2), PIX2M(_height/2));
     
-    fd.shape = &m_box;
-    fixture = body->CreateFixture(&fd);
+    _fd.shape = &box;
+    mFixture = mBody->CreateFixture(&_fd);
 }

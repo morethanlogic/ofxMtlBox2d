@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -41,7 +41,8 @@
 #include "ofxMtlBox2d.h"
 
 //--------------------------------------------------------------
-ofxMtlBox2dDebugDraw::ofxMtlBox2dDebugDraw() {
+ofxMtlBox2dDebugDraw::ofxMtlBox2dDebugDraw()
+{
     SetFlags(1 * e_shapeBit | 
              1 * e_jointBit | 
              0 * e_aabbBit  |
@@ -50,7 +51,8 @@ ofxMtlBox2dDebugDraw::ofxMtlBox2dDebugDraw() {
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color)
+{
     GLfloat	verts[vertexCount*2];
     for (int32 i = 0; i < vertexCount; i++) {
         verts[i*2+0] = M2PIX(vertices[i].x);
@@ -63,7 +65,8 @@ void ofxMtlBox2dDebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color)
+{
     GLfloat	verts[vertexCount*2];
     for (int32 i = 0; i < vertexCount; i++) {
         verts[i*2+0] = M2PIX(vertices[i].x);
@@ -79,7 +82,8 @@ void ofxMtlBox2dDebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertex
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawCircle(const b2Vec2 &center, float32 radius, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawCircle(const b2Vec2 &center, float32 radius, const b2Color &color)
+{
     float ang = 0.f;
     GLfloat	verts[kCircleSegments*2];
     for (int32 i = 0; i < kCircleSegments; i++) {
@@ -95,7 +99,8 @@ void ofxMtlBox2dDebugDraw::DrawCircle(const b2Vec2 &center, float32 radius, cons
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius, const b2Vec2 &axis, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius, const b2Vec2 &axis, const b2Color &color)
+{
     float ang = 0.f;
     GLfloat	verts[kCircleSegments*2];
     for (int32 i = 0; i < kCircleSegments; i++) {
@@ -117,7 +122,8 @@ void ofxMtlBox2dDebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius,
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Color &color)
+{
     GLfloat	verts[] = { M2PIX(p1.x), M2PIX(p1.y), 
                         M2PIX(p2.x), M2PIX(p2.y) };
     glVertexPointer(2, GL_FLOAT, 0, verts);
@@ -127,7 +133,8 @@ void ofxMtlBox2dDebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawTransform(const b2Transform &xf) {
+void ofxMtlBox2dDebugDraw::DrawTransform(const b2Transform &xf)
+{
     b2Vec2 p1 = xf.position;
     b2Vec2 p2;
     
@@ -139,7 +146,8 @@ void ofxMtlBox2dDebugDraw::DrawTransform(const b2Transform &xf) {
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawPoint(const b2Vec2 &p, float32 size, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawPoint(const b2Vec2 &p, float32 size, const b2Color &color)
+{
     GLfloat	verts[] = { M2PIX(p.x), M2PIX(p.y) };
     glVertexPointer(2, GL_FLOAT, 0, verts);
     
@@ -150,7 +158,8 @@ void ofxMtlBox2dDebugDraw::DrawPoint(const b2Vec2 &p, float32 size, const b2Colo
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawString(int x, int y, const char *string, ...) {
+void ofxMtlBox2dDebugDraw::DrawString(int x, int y, const char *string, ...)
+{
     //            char buffer[128];
     //            
     //            va_list arg;
@@ -183,7 +192,8 @@ void ofxMtlBox2dDebugDraw::DrawString(int x, int y, const char *string, ...) {
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2dDebugDraw::DrawAABB(b2AABB *aabb, const b2Color &color) {
+void ofxMtlBox2dDebugDraw::DrawAABB(b2AABB *aabb, const b2Color &color)
+{
     GLfloat	verts[] = { M2PIX(aabb->lowerBound.x), M2PIX(aabb->lowerBound.y),
                         M2PIX(aabb->upperBound.x), M2PIX(aabb->lowerBound.y),
                         M2PIX(aabb->upperBound.x), M2PIX(aabb->upperBound.y),

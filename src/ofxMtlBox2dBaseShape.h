@@ -1,8 +1,6 @@
-#pragma once
-
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -39,63 +37,64 @@
  *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
+#pragma once
+
 #include "ofxMtlBox2d.h"
 
 //========================================================================
-class ofxMtlBox2dBaseShape {
-    
+class ofxMtlBox2dBaseShape
+{    
     public:
                         ofxMtlBox2dBaseShape();
         virtual         ~ofxMtlBox2dBaseShape();
     
-        bool            setWorld(b2World* _world);
-        void            setPhysics(float _mass, float _friction, float _bounce);
-        void            setFilterData(const b2Filter _data);
+        bool            setWorld(b2World *world);
+        void            setPhysics(float mass, float friction, float bounce);
+        void            setFilterData(const b2Filter data);
     
-        void            setFixedRotation(bool _fixed);
+        void            setFixedRotation(bool bFixed);
         bool            isFixedRotation();
     
-        void            setAngularDamping(float _damping);
+        void            setAngularDamping(float damping);
         float           getAngularDamping();
-        void            setLinearDamping(float _damping);
+        void            setLinearDamping(float damping);
         float           getLinearDamping();
         
-        void            setPosition(const b2Vec2& _pos);
-        void            setPositionB2(const b2Vec2& _pos);
-        const b2Vec2    getPosition();
+        void            setPosition(const ofPoint& pos);
+        void            setPositionB2(const b2Vec2& pos);
+        const ofPoint   getPosition();
         const b2Vec2&   getPositionB2();
     
         float           getRotation();
         const float     getRotationB2();
     
-        void            setLinearVelocity(const b2Vec2& _vel);
-        void            setLinearVelocityB2(const b2Vec2& _vel);
+        void            setLinearVelocity(const ofPoint& vel);
+        void            setLinearVelocityB2(const b2Vec2& vel);
         const b2Vec2    getLinearVelocity();
         const b2Vec2    getLinearVelocityB2();
     
-        void            setAngularVelocity(float _vel);
+        void            setAngularVelocity(float vel);
         float           getAngularVelocity();
     
-        void            applyForce(b2Vec2 _pt, b2Vec2 _amount);
-        void            applyForceB2(b2Vec2 _pt, b2Vec2 _amount);
-        void            applyLinearImpulse(b2Vec2 _pt, b2Vec2 _amount);
-        void            applyLinearImpulseB2(b2Vec2 _pt, b2Vec2 _amount);
-        void            applyAngularImpulse(float _amount);
+        void            applyForce(const ofPoint& force, const ofPoint& point);
+        void            applyForceB2(const b2Vec2& force, const b2Vec2& point);
+        void            applyLinearImpulse(const ofPoint& impulse, const ofPoint& point);
+        void            applyLinearImpulseB2(const b2Vec2& impulse, const b2Vec2& point);
+        void            applyAngularImpulse(float impulse);
         
         void            destroy();
     
         virtual void    update() {}
         virtual void    draw() {}
     
-        b2World*        world;
-        b2Body*         body;
-        b2Fixture*      fixture;
+        b2World*        mWorld;
+        b2Body*         mBody;
+        b2Fixture*      mFixture;
     
     protected:
         // cached structs
-        b2BodyDef       bd;
-        b2FixtureDef    fd;
-        b2Vec2          pos;
-        float           ang;
-	
+        b2BodyDef       _bd;
+        b2FixtureDef    _fd;
+        b2Vec2          _pos;
+        float           _ang;
 };
