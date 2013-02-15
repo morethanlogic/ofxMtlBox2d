@@ -32,8 +32,8 @@
  * ***********************************************************************/
 
 /*
- *  mtlBox2dDebugDraw.h
- *  mtlBox2d
+ *  ofxMtlBox2dDebugDraw.h
+ *  ofxMtlBox2d
  *
  *  Created by Elie Zananiri on 10-11-22.
  *  Based on Box2d iPhone port by Simon Oliver: http://www.simonoliver.com
@@ -47,10 +47,10 @@
 #define kAxisScale      .4f
 
 //========================================================================
-class mtlBox2dDebugDraw : public b2DebugDraw {
+class ofxMtlBox2dDebugDraw : public b2DebugDraw {
     
     public:
-                mtlBox2dDebugDraw();
+                ofxMtlBox2dDebugDraw();
     
         void    DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);
         void    DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color);

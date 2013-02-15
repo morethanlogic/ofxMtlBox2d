@@ -1,5 +1,3 @@
-#pragma once
-
 /***********************************************************************
  *
  * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
@@ -32,43 +30,68 @@
  * ***********************************************************************/
 
 /*
- *  mtlBox2dHitTestCallback.h
- *  mtlBox2d
+ *  ofxMtlBox2dCircle.cpp
+ *  ofxMtlBox2d
  *
- *  Created by Elie Zananiri on 10-11-22.
- *  Based on Box2D by Erin Catto: http://www.gphysics.com
+ *  Created by Elie Zananiri on 10-10-06.
+ *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
-#include <Box2D.h>
+#include "ofxMtlBox2dCircle.h"
 
-//========================================================================
-class mtlBox2dHitTestCallback : public b2QueryCallback {
+//------------------------------------------------
+ofxMtlBox2dCircle::ofxMtlBox2dCircle() : ofxMtlBox2dBaseShape() {
+    dir = new GLfloat[4];
+}
+
+//------------------------------------------------
+ofxMtlBox2dCircle::~ofxMtlBox2dCircle() {
+    delete [] dir;
+}
+
+//------------------------------------------------
+void ofxMtlBox2dCircle::setup(b2World* _world, float _x, float _y, float _radius, float _angle, bool _static) {
+    if (!setWorld(_world)) return;
     
-    public:
-        //------------------------------------------------
-        mtlBox2dHitTestCallback(const b2Vec2& _point) {
-            point   = _point;
-            fixture = NULL;
-        }
-        
-        //------------------------------------------------
-        bool ReportFixture(b2Fixture *_fixture) {
-            b2Body* body = _fixture->GetBody();
-            if (body->GetType() == b2_dynamicBody) {
-                if (_fixture->TestPoint(point)) {
-                    fixture = _fixture;
-                    
-                    // done, terminate the query
-                    return false;
-                }
-            }
-            
-            // continue the query
-            return true;
-        }
-        
-        //------------------------------------------------
-        b2Vec2      point;
-        b2Fixture   *fixture;
+    // create a body and add it to the world
+    bd.type = _static? b2_staticBody : b2_dynamicBody;
+    bd.position.Set(PIX2M(_x), PIX2M(_y));
+    bd.angle = _angle;
     
-};
+    body = world->CreateBody(&bd);
+    
+    // add collision shapes to that body
+    radius = _radius;
+    b2CircleShape m_circle;
+    m_circle.m_radius = PIX2M(radius);
+
+    fd.shape = &m_circle;
+    fixture = body->CreateFixture(&fd);
+}
+
+//------------------------------------------------
+float ofxMtlBox2dCircle::getRadius() {
+    return radius;
+}
+
+//------------------------------------------------
+void ofxMtlBox2dCircle::setRadius(float _radius) {
+    // save the transform parameters
+    bd.position = getPosition();
+    bd.angle    = getRotation();
+    
+    // destroy the current body
+    world->DestroyBody(body);
+    
+    // create a body and add it to the world
+    body = world->CreateBody(&bd);
+    
+    // add collision shapes to that body
+    radius = _radius;
+    b2CircleShape m_circle;
+    m_circle.m_radius = PIX2M(radius);
+    
+    fd.shape = &m_circle;
+    fixture = body->CreateFixture(&fd);
+}
+

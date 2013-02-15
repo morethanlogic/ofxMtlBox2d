@@ -1,9 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "mtlBox2d.h"
-#include "mtlBox2dCircle.h"
-#include "mtlBox2dBox.h"
+#include "ofxMtlBox2d.h"
+#include "ofxMtlBox2dCircle.h"
+#include "ofxMtlBox2dBox.h"
 
 //========================================================================
 class testApp : public ofBaseApp {
@@ -20,9 +20,9 @@ class testApp : public ofBaseApp {
 		void                mousePressed(int x, int y, int button);
 		void                mouseReleased();
     
-        mtlBox2d            physics;
+        ofxMtlBox2d         physics;
         b2World*            world;
-        vector<mtlBox2dBaseShape*>   bodies;
+        vector<ofxMtlBox2dBaseShape*> bodies;
     
         bool                debug;
         bool                info;

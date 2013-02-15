@@ -1,3 +1,5 @@
+#pragma once
+
 /***********************************************************************
  *
  * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
@@ -30,44 +32,43 @@
  * ***********************************************************************/
 
 /*
- *  mtlBox2dBox.cpp
- *  mtlBox2d
+ *  ofxMtlBox2dHitTestCallback.h
+ *  ofxMtlBox2d
  *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+ *  Created by Elie Zananiri on 10-11-22.
+ *  Based on Box2D by Erin Catto: http://www.gphysics.com
  */
 
-#include "mtlBox2dBox.h"
+#include <Box2D.h>
 
-//------------------------------------------------
-mtlBox2dBox::mtlBox2dBox() {
-    dir   = new GLfloat[4];
-    verts = new GLfloat[4 * 2];
-}
-
-//------------------------------------------------
-mtlBox2dBox::~mtlBox2dBox() {
-    delete [] dir;
-    delete [] verts;
-}
-
-//------------------------------------------------
-void mtlBox2dBox::setup(b2World* _world, float _x, float _y, float _width, float _height, float _angle, bool _static) {
-    if (!setWorld(_world)) return;
+//========================================================================
+class ofxMtlBox2dHitTestCallback : public b2QueryCallback {
     
-    // create a body and add it to the world
-    bd.type = _static? b2_staticBody : b2_dynamicBody;
-    bd.position.Set(PIX2M(_x), PIX2M(_y));
-    bd.angle = _angle;
+    public:
+        //------------------------------------------------
+        ofxMtlBox2dHitTestCallback(const b2Vec2& _point) {
+            point   = _point;
+            fixture = NULL;
+        }
+        
+        //------------------------------------------------
+        bool ReportFixture(b2Fixture *_fixture) {
+            b2Body* body = _fixture->GetBody();
+            if (body->GetType() == b2_dynamicBody) {
+                if (_fixture->TestPoint(point)) {
+                    fixture = _fixture;
+                    
+                    // done, terminate the query
+                    return false;
+                }
+            }
+            
+            // continue the query
+            return true;
+        }
+        
+        //------------------------------------------------
+        b2Vec2      point;
+        b2Fixture   *fixture;
     
-    body = world->CreateBody(&bd);
-    
-    // add collision shapes to that body
-    width  = _width;
-    height = _height;
-    b2PolygonShape m_box;
-    m_box.SetAsBox(PIX2M(width/2), PIX2M(height/2));
-    
-    fd.shape = &m_box;
-    fixture = body->CreateFixture(&fd);
-}
+};

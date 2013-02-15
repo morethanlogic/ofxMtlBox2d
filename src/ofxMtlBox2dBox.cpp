@@ -30,27 +30,29 @@
  * ***********************************************************************/
 
 /*
- *  mtlBox2dCircle.cpp
- *  mtlBox2d
+ *  ofxMtlBox2dBox.cpp
+ *  ofxMtlBox2d
  *
  *  Created by Elie Zananiri on 10-10-06.
  *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
-#include "mtlBox2dCircle.h"
+#include "ofxMtlBox2dBox.h"
 
 //------------------------------------------------
-mtlBox2dCircle::mtlBox2dCircle() : mtlBox2dBaseShape() {
-    dir = new GLfloat[4];
+ofxMtlBox2dBox::ofxMtlBox2dBox() {
+    dir   = new GLfloat[4];
+    verts = new GLfloat[4 * 2];
 }
 
 //------------------------------------------------
-mtlBox2dCircle::~mtlBox2dCircle() {
+ofxMtlBox2dBox::~ofxMtlBox2dBox() {
     delete [] dir;
+    delete [] verts;
 }
 
 //------------------------------------------------
-void mtlBox2dCircle::setup(b2World* _world, float _x, float _y, float _radius, float _angle, bool _static) {
+void ofxMtlBox2dBox::setup(b2World* _world, float _x, float _y, float _width, float _height, float _angle, bool _static) {
     if (!setWorld(_world)) return;
     
     // create a body and add it to the world
@@ -61,37 +63,11 @@ void mtlBox2dCircle::setup(b2World* _world, float _x, float _y, float _radius, f
     body = world->CreateBody(&bd);
     
     // add collision shapes to that body
-    radius = _radius;
-    b2CircleShape m_circle;
-    m_circle.m_radius = PIX2M(radius);
-
-    fd.shape = &m_circle;
+    width  = _width;
+    height = _height;
+    b2PolygonShape m_box;
+    m_box.SetAsBox(PIX2M(width/2), PIX2M(height/2));
+    
+    fd.shape = &m_box;
     fixture = body->CreateFixture(&fd);
 }
-
-//------------------------------------------------
-float mtlBox2dCircle::getRadius() {
-    return radius;
-}
-
-//------------------------------------------------
-void mtlBox2dCircle::setRadius(float _radius) {
-    // save the transform parameters
-    bd.position = getPosition();
-    bd.angle    = getRotation();
-    
-    // destroy the current body
-    world->DestroyBody(body);
-    
-    // create a body and add it to the world
-    body = world->CreateBody(&bd);
-    
-    // add collision shapes to that body
-    radius = _radius;
-    b2CircleShape m_circle;
-    m_circle.m_radius = PIX2M(radius);
-    
-    fd.shape = &m_circle;
-    fixture = body->CreateFixture(&fd);
-}
-
