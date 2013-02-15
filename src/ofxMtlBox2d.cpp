@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -41,99 +41,113 @@
 #include "ofxMtlBox2dHitTestCallback.h"
 
 //--------------------------------------------------------------
-ofxMtlBox2d::ofxMtlBox2d() {
+ofxMtlBox2d::ofxMtlBox2d()
+{
     // create the world
-    world = new b2World(b2Vec2(0, 0), true);
-    world->SetDebugDraw(&debugDraw);
+    _world = new b2World(b2Vec2(0, 0), true);
+    _world->SetDebugDraw(&_debugDraw);
 }
 
 //--------------------------------------------------------------
-ofxMtlBox2d::~ofxMtlBox2d() {
-    delete world;
-    world = NULL;
+ofxMtlBox2d::~ofxMtlBox2d()
+{
+    delete _world;
+    _world = NULL;
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::createBounds(float _x, float _y, float _width, float _height) {
-    if (!world) {
+void ofxMtlBox2d::createBounds(float x, float y, float width, float height)
+{
+    if (!_world) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2d::createBounds() Must have a valid b2World");
 		return;
     }
     
     b2BodyDef bd;
-    bounds = world->CreateBody(&bd);
+    _bounds = _world->CreateBody(&bd);
     
     b2PolygonShape shape;
     
     // top
-    shape.SetAsEdge(b2Vec2(0,0), b2Vec2(PIX2M(_width),0));
-    bounds->CreateFixture(&shape, 0.0f);
+    shape.SetAsEdge(b2Vec2(0, 0), b2Vec2(PIX2M(width), 0));
+    _bounds->CreateFixture(&shape, 0.0f);
     
     // bottom
-    shape.SetAsEdge(b2Vec2(0,PIX2M(_height)), b2Vec2(PIX2M(_width),PIX2M(_height)));
-    bounds->CreateFixture(&shape, 0.0f);
+    shape.SetAsEdge(b2Vec2(0, PIX2M(height)), b2Vec2(PIX2M(width), PIX2M(height)));
+    _bounds->CreateFixture(&shape, 0.0f);
     
     // left
-    shape.SetAsEdge(b2Vec2(0, 0), b2Vec2(0,PIX2M(_height)));
-    bounds->CreateFixture(&shape, 0.0f);
+    shape.SetAsEdge(b2Vec2(0, 0), b2Vec2(0, PIX2M(height)));
+    _bounds->CreateFixture(&shape, 0.0f);
     
     // right
-    shape.SetAsEdge(b2Vec2(PIX2M(_width),0), b2Vec2(PIX2M(_width),PIX2M(_height)));
-    bounds->CreateFixture(&shape, 0.0f);
+    shape.SetAsEdge(b2Vec2(PIX2M(width), 0), b2Vec2(PIX2M(width), PIX2M(height)));
+    _bounds->CreateFixture(&shape, 0.0f);
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::update(float _fps) {
-	world->Step(1 / _fps, VEL_ITERATIONS, POS_ITERATIONS);
+void ofxMtlBox2d::update(float fps)
+{
+	_world->Step(1 / fps, VEL_ITERATIONS, POS_ITERATIONS);
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::setGravity(const b2Vec2& _gravity) {
-    world->SetGravity(PIX2M(_gravity));
+void ofxMtlBox2d::setGravity(const ofPoint& gravity)
+{
+    _world->SetGravity(PT2VEC(gravity));
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::setGravityB2(const b2Vec2& _gravity) {
-    world->SetGravity(_gravity);
+void ofxMtlBox2d::setGravityB2(const b2Vec2& _gravity)
+{
+    _world->SetGravity(_gravity);
 }
 
 //--------------------------------------------------------------
-b2Vec2 ofxMtlBox2d::getGravity() const {
-    return M2PIX(world->GetGravity());
+ofPoint ofxMtlBox2d::getGravity() const
+{
+    return VEC2PT(_world->GetGravity());
 }
 
 //--------------------------------------------------------------
-b2Vec2 ofxMtlBox2d::getGravityB2() const {
-    return world->GetGravity();
+b2Vec2 ofxMtlBox2d::getGravityB2() const
+{
+    return _world->GetGravity();
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::debug() {
-    world->DrawDebugData();
+void ofxMtlBox2d::debug()
+{
+    _world->DrawDebugData();
 }
 
 //--------------------------------------------------------------
-b2World* ofxMtlBox2d::getWorld() {
-    return world;
+b2World* ofxMtlBox2d::getWorld()
+{
+    return _world;
 }
 
 //--------------------------------------------------------------
-b2Body* ofxMtlBox2d::getBounds() {
-    return bounds;
+b2Body* ofxMtlBox2d::getBounds()
+{
+    return _bounds;
 }
 
 //--------------------------------------------------------------
-int ofxMtlBox2d::getBodyCount() { 
-    return world->GetBodyCount();
+int ofxMtlBox2d::getBodyCount()
+{
+    return _world->GetBodyCount();
 }
 
 //--------------------------------------------------------------
-int ofxMtlBox2d::getJointCount() { 
-    return world->GetJointCount();
+int ofxMtlBox2d::getJointCount()
+{
+    return _world->GetJointCount();
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::enableMouseJoints() {
+void ofxMtlBox2d::enableMouseJoints()
+{
 #ifdef TARGET_OF_IPHONE
 	ofAddListener(ofEvents.touchDown,  this, &ofxMtlBox2d::onPress);
 	ofAddListener(ofEvents.touchMoved, this, &ofxMtlBox2d::onDrag);
@@ -146,7 +160,8 @@ void ofxMtlBox2d::enableMouseJoints() {
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::disableMouseJoints() {
+void ofxMtlBox2d::disableMouseJoints()
+{
 #ifdef TARGET_OF_IPHONE
 	ofRemoveListener(ofEvents.touchDown,  this, &ofxMtlBox2d::onPress);
 	ofRemoveListener(ofEvents.touchMoved, this, &ofxMtlBox2d::onDrag);
@@ -160,11 +175,12 @@ void ofxMtlBox2d::disableMouseJoints() {
 
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onPress(ofTouchEventArgs &args) {
+void ofxMtlBox2d::onPress(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onPress(ofMouseEventArgs &args) {
+void ofxMtlBox2d::onPress(ofMouseEventArgs &args)
 #endif
-    if (mouseJoint) return;
+{
+    if (_mouseJoint) return;
     
     b2Vec2 mousePt = PIX2M(b2Vec2(args.x, args.y));
     
@@ -177,40 +193,42 @@ void ofxMtlBox2d::onPress(ofMouseEventArgs &args) {
     
 	// query the world for overlapping shapes
 	ofxMtlBox2dHitTestCallback callback(mousePt);
-	world->QueryAABB(&callback, aabb);
+	_world->QueryAABB(&callback, aabb);
     
 	if (callback.fixture) {
 		b2Body* hitBody = callback.fixture->GetBody();
 		b2MouseJointDef md;
-		md.bodyA = bounds;
+		md.bodyA = _bounds;
 		md.bodyB = hitBody;
 		md.target = mousePt;
 		md.maxForce = 1000.0f * hitBody->GetMass();
-		mouseJoint = (b2MouseJoint *)world->CreateJoint(&md);
+		_mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
 		hitBody->SetAwake(true);
 	}   
 }
     
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onDrag(ofTouchEventArgs &args) {
+void ofxMtlBox2d::onDrag(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onDrag(ofMouseEventArgs &args) {
+void ofxMtlBox2d::onDrag(ofMouseEventArgs &args)
 #endif
-    if (mouseJoint) {
+{
+    if (_mouseJoint) {
         b2Vec2 mousePt = PIX2M(b2Vec2(args.x, args.y));
-		mouseJoint->SetTarget(mousePt);
+		_mouseJoint->SetTarget(mousePt);
 	}
 }
     
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onRelease(ofTouchEventArgs &args) {
+void ofxMtlBox2d::onRelease(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onRelease(ofMouseEventArgs &args) {
+void ofxMtlBox2d::onRelease(ofMouseEventArgs &args)
 #endif
-    if (mouseJoint) {
-		world->DestroyJoint(mouseJoint);
-		mouseJoint = NULL;
+{
+    if (_mouseJoint) {
+		_world->DestroyJoint(_mouseJoint);
+		_mouseJoint = NULL;
 	}
 }

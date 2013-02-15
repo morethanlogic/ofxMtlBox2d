@@ -1,8 +1,6 @@
-#pragma once
-
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -39,6 +37,8 @@
  *  Based on Box2d iPhone port by Simon Oliver: http://www.simonoliver.com
  */
 
+#pragma once
+
 #include "ofMain.h"
 #include <Box2D.h>
 
@@ -47,8 +47,8 @@
 #define kAxisScale      .4f
 
 //========================================================================
-class ofxMtlBox2dDebugDraw : public b2DebugDraw {
-    
+class ofxMtlBox2dDebugDraw : public b2DebugDraw
+{
     public:
                 ofxMtlBox2dDebugDraw();
     
@@ -61,5 +61,4 @@ class ofxMtlBox2dDebugDraw : public b2DebugDraw {
         void    DrawPoint(const b2Vec2 &p, float32 size, const b2Color &color);
         void    DrawString(int x, int y, const char *string, ...);
         void    DrawAABB(b2AABB *aabb, const b2Color &color);
-        
 };

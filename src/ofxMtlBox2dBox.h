@@ -1,8 +1,6 @@
-#pragma once
-
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -39,19 +37,20 @@
  *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
+#pragma once
+
 #include "ofxMtlBox2dBaseShape.h"
 
 //========================================================================
-class ofxMtlBox2dBox : public ofxMtlBox2dBaseShape {
-	
+class ofxMtlBox2dBox : public ofxMtlBox2dBaseShape
+{
     public:
-                        ofxMtlBox2dBox();
-                        ~ofxMtlBox2dBox();
-        void            setup(b2World* _world, float _x, float _y, float _width, float _height, float _angle = 0, bool _static = false);
+                    ofxMtlBox2dBox();
+                    ~ofxMtlBox2dBox();
+        void        setup(b2World *world, float x, float y, float width, float height, float angle = 0, bool bStatic = false);
         
     protected:
-        float           width, height;
-        GLfloat*        dir;
-        GLfloat*        verts;
-    
+        float       _width, _height;
+        GLfloat*    _dir;
+        GLfloat*    _verts;
 };

@@ -1,8 +1,6 @@
-#pragma once
-
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -39,6 +37,8 @@
  *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
  */
 
+#pragma once
+
 #include "ofMain.h"
 
 #include <Box2D.h>
@@ -49,7 +49,9 @@
 #define POS_ITERATIONS  3
 
 #define M2PIX(m)        (BOX2D_SCALE * m)
-#define PIX2M(p)        ((1.f / BOX2D_SCALE) * p)
+#define PIX2M(x)        ((1.f / BOX2D_SCALE) * x)
+#define VEC2PT(v)       ofPoint(M2PIX(v.x), M2PIX(v.y))
+#define PT2VEC(p)       b2Vec2(PIX2M(p.x), PIX2M(p.y))
 #define DEG2RAD(d)      (d * M_PI / 180.f)
 #define RAD2DEG(r)      (r * 180.f / M_PI)
 
@@ -59,20 +61,20 @@
 // pixels, unless the method has the "B2" suffix in its name. For 
 // rotations, the data is assumed to be in degrees, or in radians if the
 // method has the "B2" suffix.
-class ofxMtlBox2d {
-    
+class ofxMtlBox2d
+{    
     public:
                     ofxMtlBox2d();
                     ~ofxMtlBox2d();
     
-        void        createBounds(float _x, float _y, float _width, float _height);
+        void        createBounds(float x, float y, float width, float height);
     
-        void        update(float _fps = 30.0f);
+        void        update(float fps = 30.0f);
         void        debug();
         
-        void        setGravity(const b2Vec2& _gravity);
-        void        setGravityB2(const b2Vec2& _gravity);
-        b2Vec2      getGravity() const;
+        void        setGravity(const ofPoint& gravity);
+        void        setGravityB2(const b2Vec2& gravity);
+        ofPoint     getGravity() const;
         b2Vec2      getGravityB2() const;
         
         b2World*    getWorld();
@@ -94,10 +96,9 @@ class ofxMtlBox2d {
 #endif
         
     private:
-        b2World             *world;
-        b2Body              *bounds;
-        b2MouseJoint        *mouseJoint;
-        ofxMtlBox2dDebugDraw   debugDraw;
-
+        b2World *       _world;
+        b2Body *        _bounds;
+        b2MouseJoint *  _mouseJoint;
+        ofxMtlBox2dDebugDraw    _debugDraw;
 };
 

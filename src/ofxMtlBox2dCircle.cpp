@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (c) 2010 Elie Zananiri, Hugues Bruyère
+ * Copyright (c) 2010-2013 Elie Zananiri, Hugues Bruyère
  * more than logic http://www.morethanlogic.com/
  * All rights reserved.
  *
@@ -40,58 +40,62 @@
 #include "ofxMtlBox2dCircle.h"
 
 //------------------------------------------------
-ofxMtlBox2dCircle::ofxMtlBox2dCircle() : ofxMtlBox2dBaseShape() {
-    dir = new GLfloat[4];
+ofxMtlBox2dCircle::ofxMtlBox2dCircle() : ofxMtlBox2dBaseShape()
+{
+    _dir = new GLfloat[4];
 }
 
 //------------------------------------------------
-ofxMtlBox2dCircle::~ofxMtlBox2dCircle() {
-    delete [] dir;
+ofxMtlBox2dCircle::~ofxMtlBox2dCircle()
+{
+    delete [] _dir;
 }
 
 //------------------------------------------------
-void ofxMtlBox2dCircle::setup(b2World* _world, float _x, float _y, float _radius, float _angle, bool _static) {
-    if (!setWorld(_world)) return;
+void ofxMtlBox2dCircle::setup(b2World *world, float x, float y, float radius, float angle, bool bStatic)
+{
+    if (!setWorld(world)) return;
     
     // create a body and add it to the world
-    bd.type = _static? b2_staticBody : b2_dynamicBody;
-    bd.position.Set(PIX2M(_x), PIX2M(_y));
-    bd.angle = _angle;
+    _bd.type = bStatic? b2_staticBody : b2_dynamicBody;
+    _bd.position.Set(PIX2M(x), PIX2M(y));
+    _bd.angle = DEG2RAD(angle);
     
-    body = world->CreateBody(&bd);
+    mBody = mWorld->CreateBody(&_bd);
     
     // add collision shapes to that body
-    radius = _radius;
-    b2CircleShape m_circle;
-    m_circle.m_radius = PIX2M(radius);
+    _radius = radius;
+    b2CircleShape circle;
+    circle.m_radius = PIX2M(_radius);
 
-    fd.shape = &m_circle;
-    fixture = body->CreateFixture(&fd);
+    _fd.shape = &circle;
+    mFixture = mBody->CreateFixture(&_fd);
 }
 
 //------------------------------------------------
-float ofxMtlBox2dCircle::getRadius() {
-    return radius;
+float ofxMtlBox2dCircle::getRadius()
+{
+    return _radius;
 }
 
 //------------------------------------------------
-void ofxMtlBox2dCircle::setRadius(float _radius) {
+void ofxMtlBox2dCircle::setRadius(float radius) {
     // save the transform parameters
-    bd.position = getPosition();
-    bd.angle    = getRotation();
+    _bd.position = getPositionB2();
+    _bd.angle    = getRotationB2();
     
     // destroy the current body
-    world->DestroyBody(body);
+    mWorld->DestroyBody(mBody);
     
     // create a body and add it to the world
-    body = world->CreateBody(&bd);
+    mBody = mWorld->CreateBody(&_bd);
     
     // add collision shapes to that body
-    radius = _radius;
-    b2CircleShape m_circle;
-    m_circle.m_radius = PIX2M(radius);
+    _radius = radius;
+    b2CircleShape circle;
+    circle.m_radius = PIX2M(_radius);
     
-    fd.shape = &m_circle;
-    fixture = body->CreateFixture(&fd);
+    _fd.shape = &circle;
+    mFixture = mBody->CreateFixture(&_fd);
 }
 
