@@ -240,11 +240,11 @@ void ofxMtlBox2dBaseShape::applyAngularImpulse(float impulse)
 void ofxMtlBox2dBaseShape::destroy()
 {
     if (!mWorld) {
-        ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::setWorld() Must have a valid b2World");
+        ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::destroy() Must have a valid b2World");
         return;
     }
     else if (!mBody) {
-        ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::setWorld() NULL body");
+        ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::destroy() NULL body");
         return;
     }
     
