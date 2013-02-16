@@ -50,6 +50,7 @@ class ofxMtlBox2dDistanceJoint : public ofxMtlBox2dBaseJoint
 
         void    setPhysics(float frequency, float damping);
         void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB);
+        void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB);
 
         void    setLength(float length);
         void    setLengthB2(float length);

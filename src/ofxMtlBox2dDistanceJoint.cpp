@@ -61,12 +61,18 @@ void ofxMtlBox2dDistanceJoint::setPhysics(float frequency, float damping)
 //------------------------------------------------
 void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB)
 {
-    if (!setWorld(world)) return;
-
-    // create a joint and add it to the world
     b2Vec2 anchorA = bodyA->GetWorldCenter();
     b2Vec2 anchorB = bodyB->GetWorldCenter();
 
+    setup(world, bodyA, bodyB, anchorA, anchorB);
+}
+
+//------------------------------------------------
+void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB)
+{
+    if (!setWorld(world)) return;
+
+    // create a joint and add it to the world
     _jd.Initialize(bodyA, bodyB, anchorA, anchorB);
 
     mJoint = mWorld->CreateJoint(&_jd);
