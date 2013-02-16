@@ -45,16 +45,16 @@
 class ofxMtlBox2dDistanceJoint : public ofxMtlBox2dBaseJoint
 {
     public:
-                            ofxMtlBox2dDistanceJoint();
-                            ~ofxMtlBox2dDistanceJoint();
+                ofxMtlBox2dDistanceJoint();
+                ~ofxMtlBox2dDistanceJoint();
 
-        void                setPhysics(float frequency, float damping);
-        void                setup(b2World *world, b2Body *bodyA, b2Body *bodyB);
+        void    setPhysics(float frequency, float damping);
+        void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB);
 
-        void                setLength(float length);
-        void                setLengthB2(float length);
-        float               getLength();
-        float               getLengthB2();
+        void    setLength(float length);
+        void    setLengthB2(float length);
+        float   getLength();
+        float   getLengthB2();
 
     protected:
         // cached structs
