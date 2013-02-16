@@ -46,18 +46,18 @@
 class ofxMtlBox2dCircle : public ofxMtlBox2dBaseShape
 {	
     public:
-                    ofxMtlBox2dCircle();
-                    ~ofxMtlBox2dCircle();
+                ofxMtlBox2dCircle();
+                ~ofxMtlBox2dCircle();
     
-        void        setup(ofxMtlBox2dWorld *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
-        void        setupB2(b2World *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
+        void    setup(ofxMtlBox2dWorld *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
+        void    setupB2(b2World *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
     
-        void        setRadius(float radius);
-        void        setRadiusB2(float radius);
-        float       getRadius();
-        float       getRadiusB2();
+        void    setRadius(float radius);
+        void    setRadiusB2(float radius);
+        float   getRadius();
+        float   getRadiusB2();
     
     protected:
         // cached attributes
-        float       _radius;
+        float   _radius;
 };
