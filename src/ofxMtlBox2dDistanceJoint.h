@@ -29,17 +29,19 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dDistanceJoint.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 2013-02-15.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dDistanceJoint.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-15.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #pragma once
 
 #include "ofxMtlBox2dBaseJoint.h"
+#include "ofxMtlBox2dWorld.h"
+#include "ofxMtlBox2dBaseShape.h"
 
 //========================================================================
 class ofxMtlBox2dDistanceJoint : public ofxMtlBox2dBaseJoint
@@ -49,8 +51,11 @@ class ofxMtlBox2dDistanceJoint : public ofxMtlBox2dBaseJoint
                 ~ofxMtlBox2dDistanceJoint();
 
         void    setPhysics(float frequency, float damping);
-        void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB);
-        void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB);
+
+        void    setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB);
+        void    setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB, const ofPoint& anchorA, const ofPoint& anchorB);
+        void    setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB);
+        void    setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB);
 
         void    setLength(float length);
         void    setLengthB2(float length);

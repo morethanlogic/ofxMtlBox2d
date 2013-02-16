@@ -29,165 +29,154 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2d.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dWorld.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-10-06.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
+#include "ofxMtlBox2dWorld.h"
 #include "ofxMtlBox2d.h"
-#include "ofxMtlBox2dHitTestCallback.h"
 
 //--------------------------------------------------------------
-ofxMtlBox2d::ofxMtlBox2d()
+ofxMtlBox2dWorld::ofxMtlBox2dWorld()
 {
     // create the world
-    _world = new b2World(b2Vec2(0, 0), true);
-    _world->SetDebugDraw(&_debugDraw);
+    m_world = new b2World(b2Vec2(0, 0), true);
+    m_world->SetDebugDraw(&m_debugDraw);
 
-    _bounds = NULL;
+    m_bounds = NULL;
+    m_mouseJoint = NULL;
 }
 
 //--------------------------------------------------------------
-ofxMtlBox2d::~ofxMtlBox2d()
+ofxMtlBox2dWorld::~ofxMtlBox2dWorld()
 {
-    delete _world;
-    _world = NULL;
+    delete m_world;
+    m_world = NULL;
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::createBounds(float x, float y, float width, float height)
+void ofxMtlBox2dWorld::createBounds(float x, float y, float width, float height)
 {
-    if (!_world) {
-        ofLog(OF_LOG_WARNING, "ofxMtlBox2d::createBounds() Must have a valid b2World");
+    if (!m_world) {
+        ofLog(OF_LOG_WARNING, "ofxMtlBox2dWorld::createBounds() Must have a valid b2World");
 		return;
     }
 
-    if (_bounds) {
+    if (m_bounds) {
         // delete the previous bounds
-        _world->DestroyBody(_bounds);
+        m_world->DestroyBody(m_bounds);
     }
     
     b2BodyDef bd;
-    _bounds = _world->CreateBody(&bd);
+    m_bounds = m_world->CreateBody(&bd);
     
     b2PolygonShape shape;
     
     // top
     shape.SetAsEdge(b2Vec2(0, 0), b2Vec2(PIX2M(width), 0));
-    _bounds->CreateFixture(&shape, 0.0f);
+    m_bounds->CreateFixture(&shape, 0.0f);
     
     // bottom
     shape.SetAsEdge(b2Vec2(0, PIX2M(height)), b2Vec2(PIX2M(width), PIX2M(height)));
-    _bounds->CreateFixture(&shape, 0.0f);
+    m_bounds->CreateFixture(&shape, 0.0f);
     
     // left
     shape.SetAsEdge(b2Vec2(0, 0), b2Vec2(0, PIX2M(height)));
-    _bounds->CreateFixture(&shape, 0.0f);
+    m_bounds->CreateFixture(&shape, 0.0f);
     
     // right
     shape.SetAsEdge(b2Vec2(PIX2M(width), 0), b2Vec2(PIX2M(width), PIX2M(height)));
-    _bounds->CreateFixture(&shape, 0.0f);
+    m_bounds->CreateFixture(&shape, 0.0f);
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::update(float fps)
+void ofxMtlBox2dWorld::update(float fps)
 {
-	_world->Step(1 / fps, VEL_ITERATIONS, POS_ITERATIONS);
+	m_world->Step(1 / fps, VEL_ITERATIONS, POS_ITERATIONS);
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::setGravity(const ofPoint& gravity)
+void ofxMtlBox2dWorld::setGravity(const ofPoint& gravity)
 {
-    _world->SetGravity(PT2VEC(gravity));
+    m_world->SetGravity(PT2VEC(gravity));
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::setGravityB2(const b2Vec2& _gravity)
+void ofxMtlBox2dWorld::setGravityB2(const b2Vec2& gravity)
 {
-    _world->SetGravity(_gravity);
+    m_world->SetGravity(gravity);
 }
 
 //--------------------------------------------------------------
-ofPoint ofxMtlBox2d::getGravity() const
+ofPoint ofxMtlBox2dWorld::getGravity() const
 {
-    return VEC2PT(_world->GetGravity());
+    return VEC2PT(m_world->GetGravity());
 }
 
 //--------------------------------------------------------------
-b2Vec2 ofxMtlBox2d::getGravityB2() const
+b2Vec2 ofxMtlBox2dWorld::getGravityB2() const
 {
-    return _world->GetGravity();
+    return m_world->GetGravity();
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::debug()
+void ofxMtlBox2dWorld::debug()
 {
-    _world->DrawDebugData();
+    m_world->DrawDebugData();
 }
 
 //--------------------------------------------------------------
-b2World* ofxMtlBox2d::getWorld()
+int ofxMtlBox2dWorld::getBodyCount()
 {
-    return _world;
+    return m_world->GetBodyCount();
 }
 
 //--------------------------------------------------------------
-b2Body* ofxMtlBox2d::getBounds()
+int ofxMtlBox2dWorld::getJointCount()
 {
-    return _bounds;
+    return m_world->GetJointCount();
 }
 
 //--------------------------------------------------------------
-int ofxMtlBox2d::getBodyCount()
-{
-    return _world->GetBodyCount();
-}
-
-//--------------------------------------------------------------
-int ofxMtlBox2d::getJointCount()
-{
-    return _world->GetJointCount();
-}
-
-//--------------------------------------------------------------
-void ofxMtlBox2d::enableMouseJoints()
+void ofxMtlBox2dWorld::enableMouseJoints()
 {
 #ifdef TARGET_OF_IPHONE
-	ofAddListener(ofEvents.touchDown,  this, &ofxMtlBox2d::onPress);
-	ofAddListener(ofEvents.touchMoved, this, &ofxMtlBox2d::onDrag);
-	ofAddListener(ofEvents.touchUp,    this, &ofxMtlBox2d::onRelease);
+	ofAddListener(ofEvents.touchDown,  this, &ofxMtlBox2dWorld::onPress);
+	ofAddListener(ofEvents.touchMoved, this, &ofxMtlBox2dWorld::onDrag);
+	ofAddListener(ofEvents.touchUp,    this, &ofxMtlBox2dWorld::onRelease);
 #else
-	ofAddListener(ofEvents().mousePressed,  this, &ofxMtlBox2d::onPress);
-	ofAddListener(ofEvents().mouseDragged,  this, &ofxMtlBox2d::onDrag);
-	ofAddListener(ofEvents().mouseReleased, this, &ofxMtlBox2d::onRelease);
+	ofAddListener(ofEvents().mousePressed,  this, &ofxMtlBox2dWorld::onPress);
+	ofAddListener(ofEvents().mouseDragged,  this, &ofxMtlBox2dWorld::onDrag);
+	ofAddListener(ofEvents().mouseReleased, this, &ofxMtlBox2dWorld::onRelease);
 #endif
 }
 
 //--------------------------------------------------------------
-void ofxMtlBox2d::disableMouseJoints()
+void ofxMtlBox2dWorld::disableMouseJoints()
 {
 #ifdef TARGET_OF_IPHONE
-	ofRemoveListener(ofEvents.touchDown,  this, &ofxMtlBox2d::onPress);
-	ofRemoveListener(ofEvents.touchMoved, this, &ofxMtlBox2d::onDrag);
-	ofRemoveListener(ofEvents.touchUp,    this, &ofxMtlBox2d::onRelease);
+	ofRemoveListener(ofEvents.touchDown,  this, &ofxMtlBox2dWorld::onPress);
+	ofRemoveListener(ofEvents.touchMoved, this, &ofxMtlBox2dWorld::onDrag);
+	ofRemoveListener(ofEvents.touchUp,    this, &ofxMtlBox2dWorld::onRelease);
 #else
-	ofRemoveListener(ofEvents().mousePressed,  this, &ofxMtlBox2d::onPress);
-	ofRemoveListener(ofEvents().mouseDragged,  this, &ofxMtlBox2d::onDrag);
-	ofRemoveListener(ofEvents().mouseReleased, this, &ofxMtlBox2d::onRelease);
+	ofRemoveListener(ofEvents().mousePressed,  this, &ofxMtlBox2dWorld::onPress);
+	ofRemoveListener(ofEvents().mouseDragged,  this, &ofxMtlBox2dWorld::onDrag);
+	ofRemoveListener(ofEvents().mouseReleased, this, &ofxMtlBox2dWorld::onRelease);
 #endif
 }
 
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onPress(ofTouchEventArgs &args)
+void ofxMtlBox2dWorld::onPress(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onPress(ofMouseEventArgs &args)
+void ofxMtlBox2dWorld::onPress(ofMouseEventArgs &args)
 #endif
 {
-    if (_mouseJoint) return;
+    if (m_mouseJoint) return;
     
     b2Vec2 mousePt = PIX2M(b2Vec2(args.x, args.y));
     
@@ -200,42 +189,42 @@ void ofxMtlBox2d::onPress(ofMouseEventArgs &args)
     
 	// query the world for overlapping shapes
 	ofxMtlBox2dHitTestCallback callback(mousePt);
-	_world->QueryAABB(&callback, aabb);
+	m_world->QueryAABB(&callback, aabb);
     
 	if (callback.fixture) {
 		b2Body* hitBody = callback.fixture->GetBody();
 		b2MouseJointDef md;
-		md.bodyA = _bounds;
+		md.bodyA = m_bounds;
 		md.bodyB = hitBody;
 		md.target = mousePt;
 		md.maxForce = 1000.0f * hitBody->GetMass();
-		_mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
+		m_mouseJoint = (b2MouseJoint *)m_world->CreateJoint(&md);
 		hitBody->SetAwake(true);
 	}   
 }
     
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onDrag(ofTouchEventArgs &args)
+void ofxMtlBox2dWorld::onDrag(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onDrag(ofMouseEventArgs &args)
+void ofxMtlBox2dWorld::onDrag(ofMouseEventArgs &args)
 #endif
 {
-    if (_mouseJoint) {
+    if (m_mouseJoint) {
         b2Vec2 mousePt = PIX2M(b2Vec2(args.x, args.y));
-		_mouseJoint->SetTarget(mousePt);
+		m_mouseJoint->SetTarget(mousePt);
 	}
 }
     
 //--------------------------------------------------------------
 #ifdef TARGET_OF_IPHONE
-void ofxMtlBox2d::onRelease(ofTouchEventArgs &args)
+void ofxMtlBox2dWorld::onRelease(ofTouchEventArgs &args)
 #else
-void ofxMtlBox2d::onRelease(ofMouseEventArgs &args)
+void ofxMtlBox2dWorld::onRelease(ofMouseEventArgs &args)
 #endif
 {
-    if (_mouseJoint) {
-		_world->DestroyJoint(_mouseJoint);
-		_mouseJoint = NULL;
+    if (m_mouseJoint) {
+		m_world->DestroyJoint(m_mouseJoint);
+		m_mouseJoint = NULL;
 	}
 }

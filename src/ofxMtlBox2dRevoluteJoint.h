@@ -40,6 +40,8 @@
 #pragma once
 
 #include "ofxMtlBox2dBaseJoint.h"
+#include "ofxMtlBox2dWorld.h"
+#include "ofxMtlBox2dBaseShape.h"
 
 //========================================================================
 class ofxMtlBox2dRevoluteJoint : public ofxMtlBox2dBaseJoint
@@ -48,7 +50,8 @@ class ofxMtlBox2dRevoluteJoint : public ofxMtlBox2dBaseJoint
                 ofxMtlBox2dRevoluteJoint();
                 ~ofxMtlBox2dRevoluteJoint();
 
-        void    setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchor);
+        void    setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB, const ofPoint& anchor);
+        void    setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchor);
 
         void    setLimitEnabled(bool flag);
         bool    isLimitEnabled();

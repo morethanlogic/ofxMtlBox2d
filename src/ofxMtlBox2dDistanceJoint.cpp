@@ -29,15 +29,16 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dDistanceJoint.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 2013-02-15.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dDistanceJoint.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-15.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #include "ofxMtlBox2dDistanceJoint.h"
+#include "ofxMtlBox2d.h"
 
 //------------------------------------------------
 ofxMtlBox2dDistanceJoint::ofxMtlBox2dDistanceJoint()
@@ -59,47 +60,56 @@ void ofxMtlBox2dDistanceJoint::setPhysics(float frequency, float damping)
 }
 
 //------------------------------------------------
-void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB)
+void ofxMtlBox2dDistanceJoint::setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB)
 {
-    b2Vec2 anchorA = bodyA->GetWorldCenter();
-    b2Vec2 anchorB = bodyB->GetWorldCenter();
-
-    setup(world, bodyA, bodyB, anchorA, anchorB);
+    setupB2(world->m_world, bodyA->m_body, bodyB->m_body);
 }
 
 //------------------------------------------------
-void ofxMtlBox2dDistanceJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB)
+void ofxMtlBox2dDistanceJoint::setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB, const ofPoint& anchorA, const ofPoint& anchorB)
 {
-    if (!setWorld(world)) return;
+    setupB2(world->m_world, bodyA->m_body, bodyB->m_body, PT2VEC(anchorA), PT2VEC(anchorB));
+}
 
+//------------------------------------------------
+void ofxMtlBox2dDistanceJoint::setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB)
+{
+    setupB2(world, bodyA, bodyB, bodyA->GetWorldCenter(), bodyB->GetWorldCenter());
+}
+
+//------------------------------------------------
+void ofxMtlBox2dDistanceJoint::setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchorA, const b2Vec2& anchorB)
+{
+    m_world = world;
+    
     // create a joint and add it to the world
     _jd.Initialize(bodyA, bodyB, anchorA, anchorB);
 
-    mJoint = mWorld->CreateJoint(&_jd);
+    m_joint = m_world->CreateJoint(&_jd);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dDistanceJoint::setLength(float length)
 {
-    if (mJoint)
-        ((b2DistanceJoint *)mJoint)->SetLength(PIX2M(length));
+    if (m_joint)
+        ((b2DistanceJoint *)m_joint)->SetLength(PIX2M(length));
 }
 
 //------------------------------------------------
 void ofxMtlBox2dDistanceJoint::setLengthB2(float length)
 {
-    if (mJoint)
-        ((b2DistanceJoint *)mJoint)->SetLength(length);
+    if (m_joint)
+        ((b2DistanceJoint *)m_joint)->SetLength(length);
 }
 
 //------------------------------------------------
 float ofxMtlBox2dDistanceJoint::getLength()
 {
-    return M2PIX(((b2DistanceJoint *)mJoint)->GetLength());
+    return M2PIX(((b2DistanceJoint *)m_joint)->GetLength());
 }
 
 //------------------------------------------------
 float ofxMtlBox2dDistanceJoint::getLengthB2()
 {
-    return ((b2DistanceJoint *)mJoint)->GetLength();
+    return ((b2DistanceJoint *)m_joint)->GetLength();
 }

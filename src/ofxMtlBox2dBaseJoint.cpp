@@ -29,46 +29,34 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dBaseJoint.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 2013-02-15.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dBaseJoint.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-15.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
-#include "ofxMtlBox2dBaseJoint.h"
+#include "ofxMtlBox2d.h"
 
 //------------------------------------------------
 ofxMtlBox2dBaseJoint::ofxMtlBox2dBaseJoint()
 {
-    mWorld = NULL;
-    mJoint = NULL;
+    m_world = NULL;
+    m_joint = NULL;
 }
 
 //------------------------------------------------
 ofxMtlBox2dBaseJoint::~ofxMtlBox2dBaseJoint()
 {
-    if (mJoint) destroy();
-}
-
-//------------------------------------------------
-bool ofxMtlBox2dBaseJoint::setWorld(b2World* world)
-{
-    if (!world) {
-		ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseJoint::setWorld() Must have a valid b2World");
-		return false;
-	}
-
-    mWorld = world;
-    return true;
+    if (m_joint) destroy();
 }
 
 //------------------------------------------------
 b2Body * ofxMtlBox2dBaseJoint::getBodyA()
 {
-    if (mJoint)
-        mJoint->GetBodyA();
+    if (m_joint)
+        m_joint->GetBodyA();
 
     return NULL;
 }
@@ -76,8 +64,8 @@ b2Body * ofxMtlBox2dBaseJoint::getBodyA()
 //------------------------------------------------
 b2Body * ofxMtlBox2dBaseJoint::getBodyB()
 {
-    if (mJoint)
-        mJoint->GetBodyB();
+    if (m_joint)
+        m_joint->GetBodyB();
 
     return NULL;
 }
@@ -85,39 +73,39 @@ b2Body * ofxMtlBox2dBaseJoint::getBodyB()
 //------------------------------------------------
 const ofPoint ofxMtlBox2dBaseJoint::getAnchorA()
 {
-    return VEC2PT(mJoint->GetAnchorA());
+    return VEC2PT(m_joint->GetAnchorA());
 }
 
 //------------------------------------------------
 const b2Vec2 ofxMtlBox2dBaseJoint::getAnchorAB2()
 {
-    return mJoint->GetAnchorA();
+    return m_joint->GetAnchorA();
 }
 
 //------------------------------------------------
 const ofPoint ofxMtlBox2dBaseJoint::getAnchorB()
 {
-    return VEC2PT(mJoint->GetAnchorB());
+    return VEC2PT(m_joint->GetAnchorB());
 }
 
 //------------------------------------------------
 const b2Vec2 ofxMtlBox2dBaseJoint::getAnchorBB2()
 {
-    return mJoint->GetAnchorB();
+    return m_joint->GetAnchorB();
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseJoint::destroy()
 {
-    if (!mWorld) {
+    if (!m_world) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2dDistanceJoint::destroy() Must have a valid b2World");
         return;
     }
-    else if (!mJoint) {
+    else if (!m_joint) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2dDistanceJoint::destroy() NULL joint");
         return;
     }
 
-    mWorld->DestroyJoint(mJoint);
-    mJoint  = NULL;
+    m_world->DestroyJoint(m_joint);
+    m_joint  = NULL;
 }

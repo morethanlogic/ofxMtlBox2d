@@ -12,37 +12,39 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of "more than logic" nor the names of its contributors 
+ *     * Neither the name of "more than logic" nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
  * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
  * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2d.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2d.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-16.
+//
+//  In order to deal with the two coordinate systems (pixels and meters),
+//  any data passed or returned to any ofxMtlXXX object is assumed to be
+//  in pixels, unless the method has the "B2" suffix in its name. For
+//  rotations, the data is assumed to be in degrees, or in radians if the
+//  method has the "B2" suffix. Got it?
+//
 
 #pragma once
 
-#include "ofMain.h"
-
 #include <Box2D.h>
-#include "ofxMtlBox2dDebugDraw.h"
 
 #define BOX2D_SCALE     30.f
 #define VEL_ITERATIONS  8
@@ -55,50 +57,18 @@
 #define DEG2RAD(d)      (d * M_PI / 180.f)
 #define RAD2DEG(r)      (r * 180.f / M_PI)
 
-//========================================================================
-// In order to deal with the two coordinate systems (pixels and meters),
-// any data passed or returned to any mtlXXX object is assumed to be in
-// pixels, unless the method has the "B2" suffix in its name. For 
-// rotations, the data is assumed to be in degrees, or in radians if the
-// method has the "B2" suffix. Got it?
-class ofxMtlBox2d
-{    
-    public:
-                    ofxMtlBox2d();
-                    ~ofxMtlBox2d();
-    
-        void        createBounds(float x, float y, float width, float height);
-    
-        void        update(float fps = 30.0f);
-        void        debug();
-        
-        void        setGravity(const ofPoint& gravity);
-        void        setGravityB2(const b2Vec2& gravity);
-        ofPoint     getGravity() const;
-        b2Vec2      getGravityB2() const;
-        
-        b2World*    getWorld();
-        b2Body*     getBounds();
-        int			getBodyCount();
-        int			getJointCount();
-    
-        void        enableMouseJoints();
-        void        disableMouseJoints();
-    
-#ifdef TARGET_OF_IPHONE
-        void        onPress(ofTouchEventArgs &args);
-        void        onDrag(ofTouchEventArgs &args);
-        void        onRelease(ofTouchEventArgs &args);
-#else
-        void        onPress(ofMouseEventArgs &args);
-        void        onDrag(ofMouseEventArgs &args);
-        void        onRelease(ofMouseEventArgs &args);
-#endif
-        
-    private:
-        b2World *       _world;
-        b2Body *        _bounds;
-        b2MouseJoint *  _mouseJoint;
-        ofxMtlBox2dDebugDraw    _debugDraw;
-};
+#include "ofMain.h"
 
+#include "ofxMtlBox2dDebugDraw.h"
+#include "ofxMtlBox2dWorld.h"
+
+#include "ofxMtlBox2dBaseShape.h"
+#include "ofxMtlBox2dBox.h"
+#include "ofxMtlBox2dCircle.h"
+#include "ofxMtlBox2dPolygon.h"
+
+#include "ofxMtlBox2dBaseJoint.h"
+#include "ofxMtlBox2dDistanceJoint.h"
+#include "ofxMtlBox2dRevoluteJoint.h"
+
+#include "ofxMtlBox2dHitTestCallback.h"

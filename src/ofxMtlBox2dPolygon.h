@@ -29,17 +29,18 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dPolygon.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 2013-02-15.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dPolygon.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-15.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #pragma once
 
 #include "ofxMtlBox2dBaseShape.h"
+#include "ofxMtlBox2dWorld.h"
 
 //========================================================================
 class ofxMtlBox2dPolygon : public ofxMtlBox2dBaseShape
@@ -47,7 +48,9 @@ class ofxMtlBox2dPolygon : public ofxMtlBox2dBaseShape
     public:
                     ofxMtlBox2dPolygon();
                     ~ofxMtlBox2dPolygon();
-        void        setup(b2World *world, vector<ofPoint>& points, bool bStatic = false);
+
+        void        setup(ofxMtlBox2dWorld *world, vector<ofPoint>& points, bool bStatic = false);
+        void        setupB2(b2World *world, vector<b2Vec2>& points, bool bStatic = false);
 
     protected:
 

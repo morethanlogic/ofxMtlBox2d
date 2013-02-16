@@ -29,48 +29,78 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dBox.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dBox.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-10-06.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #include "ofxMtlBox2dBox.h"
+#include "ofxMtlBox2d.h"
 
 //------------------------------------------------
 ofxMtlBox2dBox::ofxMtlBox2dBox()
 {
-    _dir   = new GLfloat[4];
-    _verts = new GLfloat[4 * 2];
+
 }
 
 //------------------------------------------------
 ofxMtlBox2dBox::~ofxMtlBox2dBox()
 {
-    delete [] _dir;
-    delete [] _verts;
+
 }
 
 //------------------------------------------------
-void ofxMtlBox2dBox::setup(b2World *world, float x, float y, float width, float height, float angle, bool bStatic)
+void ofxMtlBox2dBox::setup(ofxMtlBox2dWorld *world, float x, float y, float width, float height, float angle, bool bStatic)
 {
-    if (!setWorld(world)) return;
-    
+    setupB2(world->m_world, PIX2M(x), PIX2M(y), PIX2M(width), PIX2M(height), DEG2RAD(angle), bStatic);
+}
+
+//------------------------------------------------
+void ofxMtlBox2dBox::setupB2(b2World *world, float x, float y, float width, float height, float angle, bool bStatic)
+{
+    m_world = world;
+
     // create a body and add it to the world
     _bd.type = bStatic? b2_staticBody : b2_dynamicBody;
-    _bd.position.Set(PIX2M(x), PIX2M(y));
-    _bd.angle = DEG2RAD(angle);
-    
-    mBody = mWorld->CreateBody(&_bd);
-    
+    _bd.position.Set(x, y);
+    _bd.angle = angle;
+
+    m_body = m_world->CreateBody(&_bd);
+
     // add collision shapes to that body
-    _width  = width;
-    _height = height;
     b2PolygonShape box;
-    box.SetAsBox(PIX2M(_width/2), PIX2M(_height/2));
-    
+    box.SetAsBox(width / 2, height / 2);
+
     _fd.shape = &box;
-    mFixture = mBody->CreateFixture(&_fd);
+    m_fixture = m_body->CreateFixture(&_fd);
+
+    _width  = M2PIX(width);
+    _height = M2PIX(height);
+}
+
+//------------------------------------------------
+float ofxMtlBox2dBox::getWidth()
+{
+    return _width;
+}
+
+//------------------------------------------------
+float ofxMtlBox2dBox::getWidthB2()
+{
+    return M2PIX(_width);
+}
+
+//------------------------------------------------
+float ofxMtlBox2dBox::getHeight()
+{
+    return _height;
+}
+
+//------------------------------------------------
+float ofxMtlBox2dBox::getHeightB2()
+{
+    return M2PIX(_height);
 }

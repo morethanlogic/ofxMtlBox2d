@@ -29,13 +29,13 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dDebugDraw.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-11-22.
- *  Based on Box2d iPhone port by Simon Oliver: http://www.simonoliver.com
- */
+//
+//  ofxMtlBox2dDebugDraw.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-11-22.
+//  Based on Box2d iPhone port by Simon Oliver: http://www.simonoliver.com
+//
 
 #include "ofxMtlBox2dDebugDraw.h"
 #include "ofxMtlBox2d.h"

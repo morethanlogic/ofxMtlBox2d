@@ -29,21 +29,22 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dBaseShape.cpp
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dBaseShape.cpp
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-10-06.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #include "ofxMtlBox2dBaseShape.h"
+#include "ofxMtlBox2d.h"
 
 //------------------------------------------------
 ofxMtlBox2dBaseShape::ofxMtlBox2dBaseShape()
 {
-    mWorld = NULL;
-    mBody  = NULL;
+    m_world = NULL;
+    m_body  = NULL;
     
     _bd.allowSleep = true;
 }		
@@ -51,19 +52,7 @@ ofxMtlBox2dBaseShape::ofxMtlBox2dBaseShape()
 //------------------------------------------------ 
 ofxMtlBox2dBaseShape::~ofxMtlBox2dBaseShape()
 {
-    if (mBody) destroy();
-}
-
-//------------------------------------------------ 
-bool ofxMtlBox2dBaseShape::setWorld(b2World* world)
-{
-    if (!world) {
-		ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::setWorld() Must have a valid b2World");
-		return false;
-	}
-    
-    mWorld = world;
-    return true;
+    if (m_body) destroy();
 }
 
 //------------------------------------------------ 
@@ -77,15 +66,15 @@ void ofxMtlBox2dBaseShape::setPhysics(float mass, float friction, float bounce)
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setFilterData(const b2Filter data)
 {
-    if (mFixture)
-        mFixture->SetFilterData(data);
+    if (m_fixture)
+        m_fixture->SetFilterData(data);
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setFixedRotation(bool bFixed)
 {
-    if (mBody)
-        mBody->SetFixedRotation(bFixed);
+    if (m_body)
+        m_body->SetFixedRotation(bFixed);
     else
         _bd.fixedRotation = bFixed;
 }
@@ -93,8 +82,8 @@ void ofxMtlBox2dBaseShape::setFixedRotation(bool bFixed)
 //------------------------------------------------ 
 bool ofxMtlBox2dBaseShape::isFixedRotation()
 {
-    if (mBody)
-        return mBody->IsFixedRotation();
+    if (m_body)
+        return m_body->IsFixedRotation();
     
     return _bd.fixedRotation;
 }
@@ -102,8 +91,8 @@ bool ofxMtlBox2dBaseShape::isFixedRotation()
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setAngularDamping(float damping)
 {
-    if (mBody)
-        mBody->SetAngularDamping(damping);
+    if (m_body)
+        m_body->SetAngularDamping(damping);
     else
         _bd.angularDamping = damping;
 }
@@ -111,14 +100,14 @@ void ofxMtlBox2dBaseShape::setAngularDamping(float damping)
 //------------------------------------------------
 float ofxMtlBox2dBaseShape::getAngularDamping()
 {
-    return mBody->GetAngularDamping();
+    return m_body->GetAngularDamping();
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setLinearDamping(float damping)
 {
-    if (mBody)
-        mBody->SetLinearDamping(damping);
+    if (m_body)
+        m_body->SetLinearDamping(damping);
     else
         _bd.linearDamping = damping;
 }
@@ -126,129 +115,129 @@ void ofxMtlBox2dBaseShape::setLinearDamping(float damping)
 //------------------------------------------------
 float ofxMtlBox2dBaseShape::getLinearDamping()
 {
-    return mBody->GetLinearDamping();
+    return m_body->GetLinearDamping();
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setPosition(const ofPoint& pos)
 {
-    mBody->SetTransform(PT2VEC(pos), 0);
+    m_body->SetTransform(PT2VEC(pos), 0);
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setPositionB2(const b2Vec2& pos)
 {
-    mBody->SetTransform(pos, 0);
+    m_body->SetTransform(pos, 0);
 }
                 
 //------------------------------------------------ 
 const ofPoint ofxMtlBox2dBaseShape::getPosition()
 {
-    return VEC2PT(mBody->GetPosition());
+    return VEC2PT(m_body->GetPosition());
 }
 
 //------------------------------------------------
 const b2Vec2& ofxMtlBox2dBaseShape::getPositionB2()
 {
-    return mBody->GetPosition();
+    return m_body->GetPosition();
 }
 
 //------------------------------------------------
 float ofxMtlBox2dBaseShape::getRotation()
 {
-    return RAD2DEG(mBody->GetAngle());
+    return RAD2DEG(m_body->GetAngle());
 }
 
 //------------------------------------------------
 const float ofxMtlBox2dBaseShape::getRotationB2()
 {
-    return mBody->GetAngle();
+    return m_body->GetAngle();
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setLinearVelocity(const ofPoint& vel)
 {
-    mBody->SetLinearVelocity(PT2VEC(vel));
+    m_body->SetLinearVelocity(PT2VEC(vel));
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setLinearVelocityB2(const b2Vec2& vel)
 {
-    mBody->SetLinearVelocity(vel);
+    m_body->SetLinearVelocity(vel);
 }
 
 //------------------------------------------------ 
 const b2Vec2 ofxMtlBox2dBaseShape::getLinearVelocity()
 {
-    return M2PIX(mBody->GetLinearVelocity());
+    return M2PIX(m_body->GetLinearVelocity());
 }
 
 //------------------------------------------------ 
 const b2Vec2 ofxMtlBox2dBaseShape::getLinearVelocityB2()
 {
-    return mBody->GetLinearVelocity();
+    return m_body->GetLinearVelocity();
 }
 
 //------------------------------------------------ 
 void ofxMtlBox2dBaseShape::setAngularVelocity(float vel)
 {
-    mBody->SetAngularVelocity(vel);
+    m_body->SetAngularVelocity(vel);
 }
 
 //------------------------------------------------ 
 float ofxMtlBox2dBaseShape::getAngularVelocity()
 {
-    return mBody->GetAngularVelocity();
+    return m_body->GetAngularVelocity();
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::applyForce(const ofPoint& force, const ofPoint& point)
 {
-    if (mBody)
-        mBody->ApplyForce(PT2VEC(force), PT2VEC(point));
+    if (m_body)
+        m_body->ApplyForce(PT2VEC(force), PT2VEC(point));
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::applyForceB2(const b2Vec2& force, const b2Vec2& point)
 {
-    if (mBody)
-        mBody->ApplyForce(force, point);
+    if (m_body)
+        m_body->ApplyForce(force, point);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::applyLinearImpulse(const ofPoint& impulse, const ofPoint& point)
 {
-    if (mBody)
-        mBody->ApplyLinearImpulse(PT2VEC(impulse), PT2VEC(point));
+    if (m_body)
+        m_body->ApplyLinearImpulse(PT2VEC(impulse), PT2VEC(point));
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::applyLinearImpulseB2(const b2Vec2& impulse, const b2Vec2& point)
 {
-    if (mBody)
-        mBody->ApplyLinearImpulse(impulse, point);
+    if (m_body)
+        m_body->ApplyLinearImpulse(impulse, point);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::applyAngularImpulse(float impulse)
 {
-    if (mBody)
-        mBody->ApplyAngularImpulse(impulse);
+    if (m_body)
+        m_body->ApplyAngularImpulse(impulse);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dBaseShape::destroy()
 {
-    if (!mWorld) {
+    if (!m_world) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::destroy() Must have a valid b2World");
         return;
     }
-    else if (!mBody) {
+    else if (!m_body) {
         ofLog(OF_LOG_WARNING, "ofxMtlBox2dBaseShape::destroy() NULL body");
         return;
     }
     
-    mWorld->DestroyBody(mBody);
-    mBody  = NULL;
+    m_world->DestroyBody(m_body);
+    m_body  = NULL;
 }
 

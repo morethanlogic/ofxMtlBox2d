@@ -11,18 +11,18 @@ void testApp::setup()
 	ofSetLogLevel(OF_LOG_NOTICE);
     
     // init the physics world
-    world = physics.getWorld();
-    physics.enableMouseJoints();
-    physics.setGravityB2(b2Vec2(0, 9.8));
-    physics.createBounds(0, 0, ofGetWidth(), ofGetHeight());
+    world = new ofxMtlBox2dWorld();
+    world->enableMouseJoints();
+    world->setGravityB2(b2Vec2(0, 9.8));
+    world->createBounds(0, 0, ofGetWidth(), ofGetHeight());
     
-    bDebug = true;
+    bInfo = true;
 }
 
 //--------------------------------------------------------------
 void testApp::update()
 {
-    physics.update();
+    world->update();
 }
 
 //--------------------------------------------------------------
@@ -30,9 +30,9 @@ void testApp::draw()
 {
     ofBackground(0, 0, 0);
 
-    physics.debug();
+    world->debug();
     
-    if (bDebug) {
+    if (bInfo) {
         ofSetColor(255, 255, 255);
         ofDrawBitmapString("FPS: " + ofToString(ofGetFrameRate(), 2) +
                            "\nBODIES: " + ofToString((int)bodies.size()) +
@@ -44,8 +44,8 @@ void testApp::draw()
 void testApp::keyPressed(int key)
 {
 	switch (key) {
-        case 'd':
-            bDebug = !bDebug;
+        case 'i':
+            bInfo = !bInfo;
             break;
 	}
 }
@@ -73,14 +73,14 @@ void testApp::mousePressed(int x, int y, int button)
 {
     if (button == 0) {
         // build a new circle
-        ofxMtlBox2dCircle *circle = new ofxMtlBox2dCircle();
+        ofxMtlBox2dCircle* circle = new ofxMtlBox2dCircle();
         circle->setPhysics(10, .2f, .5f);
         circle->setup(world, x, y, ofRandom(20, 50), ofRandom(0, 359));
         bodies.push_back(circle);
     }
     else {
         // build a new box
-        ofxMtlBox2dBox *box = new ofxMtlBox2dBox();
+        ofxMtlBox2dBox* box = new ofxMtlBox2dBox();
         box->setPhysics(10, .2f, .5f);
         box->setup(world, x, y, ofRandom(20, 50), ofRandom(20, 50), ofRandom(0, 359));
         bodies.push_back(box);

@@ -38,6 +38,7 @@
 //
 
 #include "ofxMtlBox2dRevoluteJoint.h"
+#include "ofxMtlBox2d.h"
 
 //------------------------------------------------
 ofxMtlBox2dRevoluteJoint::ofxMtlBox2dRevoluteJoint()
@@ -52,21 +53,27 @@ ofxMtlBox2dRevoluteJoint::~ofxMtlBox2dRevoluteJoint()
 }
 
 //------------------------------------------------
-void ofxMtlBox2dRevoluteJoint::setup(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchor)
+void ofxMtlBox2dRevoluteJoint::setup(ofxMtlBox2dWorld *world, ofxMtlBox2dBaseShape *bodyA, ofxMtlBox2dBaseShape *bodyB, const ofPoint& anchor)
 {
-    if (!setWorld(world)) return;
+    setupB2(world->m_world, bodyA->m_body, bodyB->m_body, PT2VEC(anchor));
+}
+
+//------------------------------------------------
+void ofxMtlBox2dRevoluteJoint::setupB2(b2World *world, b2Body *bodyA, b2Body *bodyB, const b2Vec2& anchor)
+{
+    m_world = world;
 
     // create a joint and add it to the world
-    _jd.Initialize(bodyA, bodyB, b2Vec2(PIX2M(anchor.x), PIX2M(anchor.y)));
+    _jd.Initialize(bodyA, bodyB, anchor);
 
-    mJoint = mWorld->CreateJoint(&_jd);
+    m_joint = m_world->CreateJoint(&_jd);
 }
 
 //------------------------------------------------
 void ofxMtlBox2dRevoluteJoint::setLimitEnabled(bool flag)
 {
-    if (mJoint)
-        ((b2RevoluteJoint *)mJoint)->EnableLimit(flag);
+    if (m_joint)
+        ((b2RevoluteJoint *)m_joint)->EnableLimit(flag);
     else
         _jd.enableLimit = flag;
 }
@@ -74,8 +81,8 @@ void ofxMtlBox2dRevoluteJoint::setLimitEnabled(bool flag)
 //------------------------------------------------
 bool ofxMtlBox2dRevoluteJoint::isLimitEnabled()
 {
-    if (mJoint)
-        return ((b2RevoluteJoint *)mJoint)->IsLimitEnabled();
+    if (m_joint)
+        return ((b2RevoluteJoint *)m_joint)->IsLimitEnabled();
     else
         return _jd.enableLimit;
 }
@@ -83,8 +90,8 @@ bool ofxMtlBox2dRevoluteJoint::isLimitEnabled()
 //------------------------------------------------
 void ofxMtlBox2dRevoluteJoint::setLimits(float lowerAngle, float upperAngle)
 {
-    if (mJoint)
-        ((b2RevoluteJoint *)mJoint)->SetLimits(DEG2RAD(lowerAngle), DEG2RAD(upperAngle));
+    if (m_joint)
+        ((b2RevoluteJoint *)m_joint)->SetLimits(DEG2RAD(lowerAngle), DEG2RAD(upperAngle));
     else {
         _jd.lowerAngle = DEG2RAD(lowerAngle);
         _jd.upperAngle = DEG2RAD(upperAngle);
@@ -94,8 +101,8 @@ void ofxMtlBox2dRevoluteJoint::setLimits(float lowerAngle, float upperAngle)
 //------------------------------------------------
 void ofxMtlBox2dRevoluteJoint::setLimitsB2(float lowerAngle, float upperAngle)
 {
-    if (mJoint)
-        ((b2RevoluteJoint *)mJoint)->SetLimits(lowerAngle, upperAngle);
+    if (m_joint)
+        ((b2RevoluteJoint *)m_joint)->SetLimits(lowerAngle, upperAngle);
     else {
         _jd.lowerAngle = lowerAngle;
         _jd.upperAngle = upperAngle;
@@ -105,8 +112,8 @@ void ofxMtlBox2dRevoluteJoint::setLimitsB2(float lowerAngle, float upperAngle)
 //------------------------------------------------
 float ofxMtlBox2dRevoluteJoint::getLowerLimit()
 {
-    if (mJoint)
-        return RAD2DEG(((b2RevoluteJoint *)mJoint)->GetLowerLimit());
+    if (m_joint)
+        return RAD2DEG(((b2RevoluteJoint *)m_joint)->GetLowerLimit());
     else
         return RAD2DEG(_jd.lowerAngle);
 }
@@ -114,8 +121,8 @@ float ofxMtlBox2dRevoluteJoint::getLowerLimit()
 //------------------------------------------------
 float ofxMtlBox2dRevoluteJoint::getLowerLimitB2()
 {
-    if (mJoint)
-        return ((b2RevoluteJoint *)mJoint)->GetLowerLimit();
+    if (m_joint)
+        return ((b2RevoluteJoint *)m_joint)->GetLowerLimit();
     else
         return _jd.lowerAngle;
 }
@@ -123,8 +130,8 @@ float ofxMtlBox2dRevoluteJoint::getLowerLimitB2()
 //------------------------------------------------
 float ofxMtlBox2dRevoluteJoint::getUpperLimit()
 {
-    if (mJoint)
-        return RAD2DEG(((b2RevoluteJoint *)mJoint)->GetUpperLimit());
+    if (m_joint)
+        return RAD2DEG(((b2RevoluteJoint *)m_joint)->GetUpperLimit());
     else
         return RAD2DEG(_jd.upperAngle);
 }
@@ -132,8 +139,8 @@ float ofxMtlBox2dRevoluteJoint::getUpperLimit()
 //------------------------------------------------
 float ofxMtlBox2dRevoluteJoint::getUpperLimitB2()
 {
-    if (mJoint)
-        return ((b2RevoluteJoint *)mJoint)->GetUpperLimit();
+    if (m_joint)
+        return ((b2RevoluteJoint *)m_joint)->GetUpperLimit();
     else
         return _jd.upperAngle;
 }

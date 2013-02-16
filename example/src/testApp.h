@@ -2,28 +2,24 @@
 
 #include "ofMain.h"
 #include "ofxMtlBox2d.h"
-#include "ofxMtlBox2dCircle.h"
-#include "ofxMtlBox2dBox.h"
 
 //========================================================================
 class testApp : public ofBaseApp
 {
 	public:
-		void        setup();
-		void        update();
-		void        draw();
+		void    setup();
+		void    update();
+		void    draw();
 		
-		void        keyPressed(int key);
-		void        keyReleased(int key);
-		void        mouseMoved(int x, int y);
-		void        mouseDragged(int x, int y, int button);
-		void        mousePressed(int x, int y, int button);
-		void        mouseReleased();
+		void    keyPressed(int key);
+		void    keyReleased(int key);
+		void    mouseMoved(int x, int y);
+		void    mouseDragged(int x, int y, int button);
+		void    mousePressed(int x, int y, int button);
+		void    mouseReleased();
     
-        ofxMtlBox2d physics;
-        b2World *   world;
+        ofxMtlBox2dWorld* world;
         vector<ofxMtlBox2dBaseShape*> bodies;
     
-        bool        bDebug;
-        bool        bInfo;
+        bool    bInfo;
 };

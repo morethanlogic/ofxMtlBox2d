@@ -30,7 +30,7 @@
  * ***********************************************************************/
 
 //
-//  ofxMtlBox2dBaseShape.h
+//  ofxMtlBox2dWorld.h
 //  ofxMtlBox2d
 //
 //  Created by Elie Zananiri on 10-10-06.
@@ -39,60 +39,47 @@
 
 #pragma once
 
-#import <Box2D.h>
-#import "ofMain.h"
+#include <Box2D.h>
+#include "ofMain.h"
+
+#include "ofxMtlBox2dDebugDraw.h"
 
 //========================================================================
-class ofxMtlBox2dBaseShape
+class ofxMtlBox2dWorld
 {    
     public:
-                        ofxMtlBox2dBaseShape();
-        virtual         ~ofxMtlBox2dBaseShape();
-
-        void            setPhysics(float mass, float friction, float bounce);
-        void            setFilterData(const b2Filter data);
+                ofxMtlBox2dWorld();
+                ~ofxMtlBox2dWorld();
     
-        void            setFixedRotation(bool bFixed);
-        bool            isFixedRotation();
+        void    createBounds(float x, float y, float width, float height);
     
-        void            setAngularDamping(float damping);
-        float           getAngularDamping();
-        void            setLinearDamping(float damping);
-        float           getLinearDamping();
+        void    update(float fps = 30.0f);
+        void    debug();
         
-        void            setPosition(const ofPoint& pos);
-        void            setPositionB2(const b2Vec2& pos);
-        const ofPoint   getPosition();
-        const b2Vec2&   getPositionB2();
-    
-        float           getRotation();
-        const float     getRotationB2();
-    
-        void            setLinearVelocity(const ofPoint& vel);
-        void            setLinearVelocityB2(const b2Vec2& vel);
-        const b2Vec2    getLinearVelocity();
-        const b2Vec2    getLinearVelocityB2();
-    
-        void            setAngularVelocity(float vel);
-        float           getAngularVelocity();
-    
-        void            applyForce(const ofPoint& force, const ofPoint& point);
-        void            applyForceB2(const b2Vec2& force, const b2Vec2& point);
-        void            applyLinearImpulse(const ofPoint& impulse, const ofPoint& point);
-        void            applyLinearImpulseB2(const b2Vec2& impulse, const b2Vec2& point);
-        void            applyAngularImpulse(float impulse);
+        void    setGravity(const ofPoint& gravity);
+        void    setGravityB2(const b2Vec2& gravity);
+        ofPoint getGravity() const;
+        b2Vec2  getGravityB2() const;
         
-        void            destroy();
+        int		getBodyCount();
+        int		getJointCount();
     
-        virtual void    update() {}
-        virtual void    draw() {}
+        void    enableMouseJoints();
+        void    disableMouseJoints();
     
-        b2World *       m_world;
-        b2Body *        m_body;
-        b2Fixture *     m_fixture;
-    
-    protected:
-        // cached structs
-        b2BodyDef       _bd;
-        b2FixtureDef    _fd;
+#ifdef TARGET_OF_IPHONE
+        void    onPress(ofTouchEventArgs &args);
+        void    onDrag(ofTouchEventArgs &args);
+        void    onRelease(ofTouchEventArgs &args);
+#else
+        void    onPress(ofMouseEventArgs &args);
+        void    onDrag(ofMouseEventArgs &args);
+        void    onRelease(ofMouseEventArgs &args);
+#endif
+        
+        b2World *               m_world;
+        b2Body *                m_bounds;
+        b2MouseJoint *          m_mouseJoint;
+        ofxMtlBox2dDebugDraw    m_debugDraw;
 };
+

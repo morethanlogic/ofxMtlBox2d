@@ -31,13 +31,13 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dHitTestCallback.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-11-22.
- *  Based on Box2D by Erin Catto: http://www.gphysics.com
- */
+//
+//  ofxMtlBox2dHitTestCallback.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-11-22.
+//  Based on Box2D by Erin Catto: http://www.gphysics.com
+//
 
 #include <Box2D.h>
 

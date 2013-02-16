@@ -29,28 +29,36 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dBox.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dBox.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-10-06.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #pragma once
 
 #include "ofxMtlBox2dBaseShape.h"
+#include "ofxMtlBox2dWorld.h"
 
 //========================================================================
 class ofxMtlBox2dBox : public ofxMtlBox2dBaseShape
 {
     public:
-                    ofxMtlBox2dBox();
-                    ~ofxMtlBox2dBox();
-        void        setup(b2World *world, float x, float y, float width, float height, float angle = 0, bool bStatic = false);
-        
+                ofxMtlBox2dBox();
+                ~ofxMtlBox2dBox();
+    
+        void    setup(ofxMtlBox2dWorld *world, float x, float y, float width, float height, float angle = 0, bool bStatic = false);
+        void    setupB2(b2World *world, float x, float y, float width, float height, float angle = 0, bool bStatic = false);
+
+        float   getWidth();
+        float   getWidthB2();
+        float   getHeight();
+        float   getHeightB2();
+
     protected:
-        float       _width, _height;
-        GLfloat*    _dir;
-        GLfloat*    _verts;
+        // cached attributes
+        float   _width;
+        float   _height;
 };

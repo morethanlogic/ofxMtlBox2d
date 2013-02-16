@@ -29,26 +29,25 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dBaseJoint.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 2013-02-15.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dBaseJoint.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 2013-02-15.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #pragma once
 
-#include "ofxMtlBox2d.h"
+#import <Box2D.h>
+#import "ofMain.h"
 
 //========================================================================
 class ofxMtlBox2dBaseJoint
 {
     public:
-        ofxMtlBox2dBaseJoint();
-        ~ofxMtlBox2dBaseJoint();
-
-        bool                setWorld(b2World* world);
+                            ofxMtlBox2dBaseJoint();
+                            ~ofxMtlBox2dBaseJoint();
 
         b2Body *            getBodyA();
         b2Body *            getBodyB();
@@ -63,8 +62,8 @@ class ofxMtlBox2dBaseJoint
         virtual void        update() {}
         virtual void        draw() {}
 
-        b2World *           mWorld;
-        b2Joint *           mJoint;
+        b2World *           m_world;
+        b2Joint *           m_joint;
 
     protected:
 

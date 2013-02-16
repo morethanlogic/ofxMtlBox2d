@@ -29,17 +29,18 @@
  *
  * ***********************************************************************/
 
-/*
- *  ofxMtlBox2dCircle.h
- *  ofxMtlBox2d
- *
- *  Created by Elie Zananiri on 10-10-06.
- *  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
- */
+//
+//  ofxMtlBox2dCircle.h
+//  ofxMtlBox2d
+//
+//  Created by Elie Zananiri on 10-10-06.
+//  Based on ofxBox2d by Todd Vanderlin: http://code.google.com/p/vanderlin/
+//
 
 #pragma once
 
 #include "ofxMtlBox2dBaseShape.h"
+#include "ofxMtlBox2dWorld.h"
 
 //========================================================================
 class ofxMtlBox2dCircle : public ofxMtlBox2dBaseShape
@@ -47,12 +48,16 @@ class ofxMtlBox2dCircle : public ofxMtlBox2dBaseShape
     public:
                     ofxMtlBox2dCircle();
                     ~ofxMtlBox2dCircle();
-        void        setup(b2World *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
     
-        float       getRadius();
+        void        setup(ofxMtlBox2dWorld *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
+        void        setupB2(b2World *world, float x, float y, float radius, float angle = 0, bool bStatic = false);
+    
         void        setRadius(float radius);
+        void        setRadiusB2(float radius);
+        float       getRadius();
+        float       getRadiusB2();
     
     protected:
+        // cached attributes
         float       _radius;
-        GLfloat*    _dir;
 };
